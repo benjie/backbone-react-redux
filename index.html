@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>From Backbone To React | Timecounts.org</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+
+      /* ----- Fonts ----- */
+
+      @font-face {
+        font-family: Karla;
+        src: url('fonts/Karla/Karla-Regular.ttf')
+      }
+
+      /* ----- Brand colors ----- */
+
+      .tc-blue { color: #16BECC; }
+      .tc-blue-fade { color: #6DD6DF; }
+      .tc-navy { color: #2B497F; }
+      .tc-nav-fade { color: #7D8FB0; }
+      .tc-green { color: #5DC744; }
+      .tc-green-fade { color: #9CDBA5; }
+      .tc-soft-blue { color: #66ADC7; }
+      .tc-soft-blue-fade { color: #A4D0DE; }
+      .tc-warm-gray { color: #60545C; }
+      .tc-warm-gray-fade { color: #ADA7AB; }
+      .tc-light-gray { color: #D8D5D6; }
+      .tc-light-gray-fade { color: #EBEAEA; }
+
+      /* ----- Remark overrides ----- */
+
+      .remark-slide-scaler {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+
+      .remark-container,
+      .remark-notes-area {
+        background: black;
+      }
+
+      .remark-slide-content {
+        padding: 1em 3em;
+      }
+
+      .remark-slide-content h1 {
+        font-size: 3.5em;
+        line-height: 110%
+      }
+
+      .remark-slide-content h2 {
+        font-size: 2.5em
+      }
+
+      .remark-slide-content.full-code {
+        padding: 0
+      }
+      .full-code pre {
+        margin: 0
+      }
+
+      /* ----- Timecounts styles ----- */
+
+      .title-page-logo {
+        width: 100px;
+        margin-bottom: 40px;
+      }
+
+      .react-logo {
+        width: 500px;
+      }
+
+      body {
+        font-family: Futura, 'Trebuchet MS', Arial, sans-serif;
+      }
+      h1, h2, h3, p {
+        font-weight: normal;
+        color: #60545C;
+      }
+
+      p, h3 {
+        font-size: 1.8em;
+      }
+
+
+      a {
+        color: #16BECC
+      }
+
+      strong {
+        color: #16BECC
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 2px solid #EBEAEA;
+      }
+
+
+      .aside {
+        font-size: 1em;
+        color: #ADA7AB
+
+      }
+
+      /* ----- Template styles ----- */
+
+      .brown {
+        background: #6F646C
+      }
+      .brown h1,
+      .brown h2,
+      .brown p,
+      .brown .remark-inline-code {
+        color: white
+      }
+
+      .blue {
+        background: #26B9C4;
+      }
+      .blue h1, .blue h2, .blue h3 {
+        color: white
+      }
+      .blue p {
+        color: #2B497F;
+      }
+
+      .cover {
+        -webkit-background-size: cover !important;
+        -moz-background-size: cover !important;
+        background-size: cover !important;
+        background-position-x: center !important;
+        background-position-y: center !important;
+        background-repeat: no-repeat !important
+      }
+
+      .title-page {
+        padding-right: 320px;
+      }
+
+      .title-page .backbone-image {
+        background-image: url('images/backbone.jpg');
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        width: 280px;
+      }
+
+      .title-page p {
+        font-size: 1.4em;
+      }
+
+      .timecounts-is {
+        background-image: url('images/volunteers.jpg');
+      }
+
+      .hacking {
+        background-image: url("images/hacking.gif");
+      }
+
+      .hacking h1 {
+      }
+
+      .spaghetti {
+        background-image: url('images/spaghetti.jpg')
+      }
+
+      .spaghetti h2 {
+        color: white
+      }
+
+      .nightmare {
+        background-image: url('images/nightmare.gif')
+      }
+
+      .rebuild {
+        background-image: url('images/demolition.gif')
+      }
+
+      .rebuild h1 {
+        color: white
+      }
+
+
+      .happy-happy-joy-joy {
+        background-image: url('images/happy.jpg')
+      }
+
+      /* ----- Code ----- */
+
+      .has-code {
+        background: #101010;
+        padding: 0 2em
+      }
+
+      .has-code h1, .has-code h2, .has-code h3, .has-code p {
+        color: #EBEAEA
+      }
+
+      .has-code .remark-inline-code {
+        color: #A4D0DE
+      }
+
+      .remark-code, .remark-inline-code {
+        font-family: Monaco, "Lucida Console", monospace;
+        font-size: 0.8em;
+      }
+      .remark-inline-code {
+        color: #2B497F
+      }
+
+      .zoom-code .remark-code {
+        font-size: 1.1em;
+      }
+
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+
+      code .lolight,
+      code .lolight * {
+        color: #666 !important;
+      }
+
+      code .hilight,
+      code .hilight * {
+        color: #5DC744 !important;
+      }
+
+      .comment, .hljs-title {
+        color: #969896;
+      }
+
+      .hljs-variable, .hljs-attribute, .hljs-tag, .hljs-regexp, .hljs-ruby .constant, .hljs-xml .tag .title, .hljs-xml .pi, .hljs-xml .doctype, .hljs-html .doctype, .hljs-css .id, .hljs-css .class, .hljs-css .pseudo {
+        color: #cc6666;
+      }
+
+      .hljs-number, .hljs-preprocessor, .hljs-built_in, .hljs-literal, .hljs-params, .hljs-constant {
+        color: #de935f;
+      }
+
+
+      .hljs-class, .hljs-ruby .class .title, .hljs-css .rules .attribute {
+        color: #f0c674;
+      }
+
+      .hljs-string, .hljs-value, .hljs-inheritance, .hljs-header, .hljs-ruby .symbol, .hljs-xml .cdata {
+        color: #9CDBA5 !important;
+      }
+
+      .hljs-css .hexcolor {
+        color: #8abeb7;
+      }
+
+      .hljs-function, .hljs-python .decorator, .hljs-python .title, .hljs-ruby .function .title, .hljs-ruby .title .keyword, .hljs-perl .sub, .hljs-javascript .title, .hljs-coffeescript .title {
+        color: #81a2be;
+      }
+
+      .hljs-keyword, .hljs-javascript .function {
+        color: #7D8FB0;
+        font-weight: normal !important;
+      }
+
+      .hljs-default .hljs {
+        background: #101010;
+        color: #c5c8c6;
+        font-family: Menlo, Monaco, Consolas, monospace;
+        line-height: 1.5;
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+
+
+      .hljs-default .hljs-title {
+        color: #16BECC
+      }
+
+      code, .remark-code {border: none !important}
+
+    </style>
+  </head>
+  <body>
+    <script id="source" language="remarkjs"><!--
+
+class: title-page, blue
+<img src='images/logo-white.png' title='Timecounts Logo' class='title-page-logo'>
+# From Backbone To React
+
+Jof Arnold and Benjie Gillam
+
+Timecounts.org
+
+<div class='backbone-image cover'></div>
+
+
+---
+
+class: timecounts-is, cover
+
+## Timecounts: a platform for building and managing communities
+
+---
+
+class: middle
+
+# Follow along
+
+Presentation:
+
+[timecounts.github.io/backbone-react](http://timecounts.github.io/backbone-react)
+
+Examples:
+
+[github.com/timecounts/backbone-react](https://github.com/timecounts/backbone-react)
+
+
+---
+
+class: middle, center, brown
+
+# The original stack
+
+
+---
+
+class: middle, center
+
+## Backbone MVC
+
+## Rendr (isomorphic lib)
+
+## jQuery
+
+## Handlebars
+
+---
+
+
+class: middle
+
+# Problems
+
+Storing state in DOM
+
+Layout changes breaking jQuery selectors
+
+`class='_element_to_reference'` and other hacks
+
+Re-rendering entire views
+
+
+---
+
+class: middle, center, cover, spaghetti
+
+## ... a total nightmare to debug and test
+
+
+
+
+---
+
+class: middle, center, cover, nightmare
+
+---
+
+class: middle, center
+
+# React solves all of this...
+
+# Time to rebuild?
+
+
+---
+
+class: cover, rebuild
+
+#Noooooooo......!!!
+
+---
+
+class: middle, center
+
+## 50,000 existing LOC
+
+## Backbone still required for isomorphic framework
+
+... rebuilding absolutely not an option
+
+---
+
+
+
+class: middle, center, brown
+
+# Solution
+<img src='images/backbone-react-logo.png' title='React Logo' class='react-logo'>
+
+---
+
+
+class: middle
+
+
+# The plan
+
+## **1.** Policy: build all new views in React
+
+## **2.** Keep Backbone models and collections
+
+.aside[
+
+(Bonus: rapid iteration means everything will end up React anyway. Which it pretty much has)
+]
+
+---
+
+class: middle, center
+# Warning! Hackery ahead!
+
+---
+
+class: middle
+# **What this isn't**
+## The "correct" React (Flux) way of doing things
+
+---
+
+
+class: middle
+# **What this is**
+## A quick method of adding React magic to your Backbone project without having to rebuild everything
+
+---
+
+class: middle, center
+
+# Example
+## Backbone to Backbone+React
+
+---
+
+class: middle, center
+
+<a href="demos/backbone/index.html" target="_blank">Simple Backbone demo</a>
+
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Backbone Router -----
+var AppRouter = Backbone.Router.extend({
+  initialize: function() {
+    this.$rootEl = $("#content");
+    this.rootEl = this.$rootEl[0];
+  },
+  setView: function(view) {
+    if (this.view) {
+      this.view.remove();
+    }
+    this.view = view;
+    this.view.render();
+    this.$rootEl.append(this.view.el);
+  },
+  // ----------
+  routes: {
+    '': 'homeRoute',
+    'about': 'aboutRoute'
+  },
+  homeRoute: function() {
+    this.setView(new HomeView())
+  },
+  aboutRoute: function() {
+    this.setView(new AboutView())
+  }
+});
+```
+
+
+---
+
+class: middle, has-code, zoom-code
+
+```js
+// ----- About View -----
+
+var AboutView = Backbone.View.extend({
+  template: _.template('<h1>About</h1><p>' +
+    '<img src="http://www.reactiongifs.com/r/1gjdAX7.gif"></p>'),
+
+  render: function() {
+    this.$el.html(this.template());
+  }
+});
+```
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click p': 'render'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+---
+
+class: middle center
+
+# Not so fast!
+
+Calling `render()` directly will overwrite everything, including our
+`<textarea>`, resetting its content
+
+Instead we need to update just the `<span>` containing the random number:
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click p': 'newNumber'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  newNumber: function(e) {
+    this.$("span").html(this.randomNumber());
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+
+---
+
+class: middle, center
+
+# Convert to React
+
+---
+
+class: middle, center
+
+## **1.** Add React support to the router
+
+---
+
+class: middle, has-code
+
+<pre><code class="javascript"><span class="lolight">AppRouter = Backbone.Router.extend({</span>
+<span class="lolight">  //...</span>
+
+<span class="lolight">  setView: function(view) {</span>
+<span class="lolight">    if (this.view) {</span>
+<span class="hilight">      if (this.view instanceof Backbone.View) {</span>
+<span class="lolight">        this.view.remove();</span>
+<span class="hilight">      } else {</span>
+<span class="hilight">        React.unmountComponentAtNode(this.rootEl);</span>
+<span class="hilight">      }</span>
+<span class="lolight">    }</span>
+
+<span class="lolight">    this.view = view;</span>
+<span class="hilight">    if (this.view instanceof Backbone.View) {</span>
+<span class="lolight">      this.view.render();</span>
+<span class="lolight">      this.$rootEl.append(this.view.el);</span>
+<span class="hilight">    } else {</span>
+<span class="hilight">      React.render(this.view, this.rootEl);</span>
+<span class="hilight">    }</span>
+<span class="lolight">  },</span>
+
+<span class="lolight">  //...</span>
+<span class="lolight">});</span>
+</code></pre>
+
+---
+
+class: middle, center
+
+## **2.** Convert HomeView to React
+
+---
+
+class: has-code
+
+<pre><code class="javascript"><span class="hilight">var DOM = React.DOM;</span>
+<span class="hilight">var HomeView = React.createClass({</span>
+<span class="hilight">  displayName: "HomeView",</span>
+<span class="hilight">  getInitialState: function() {</span>
+<span class="hilight">    return {</span>
+<span class="hilight">      randomNumber: this.randomNumber()</span>
+<span class="hilight">    };</span>
+<span class="hilight">  },</span>
+<span class="lolight">  randomNumber: function() {</span>
+<span class="lolight">    return Math.floor(Math.random() * 100) + 1;</span>
+<span class="lolight">  },</span>
+<span class="lolight">  newNumber: function(e) {</span>
+<span class="hilight">    this.setState({</span>
+<span class="hilight">      randomNumber: this.randomNumber()</span>
+<span class="hilight">    });</span>
+<span class="lolight">  },</span>
+<span class="lolight">  render: function() {</span>
+<span class="hilight">    return DOM.div(null,</span>
+<span class="hilight">      DOM.h1(null, "Hello World!"),</span>
+<span class="hilight">      DOM.p({</span>
+<span class="hilight">          onClick: this.newNumber</span>
+<span class="hilight">        }, "Random number: " + this.state.randomNumber + " (click for another)"),</span>
+<span class="hilight">      DOM.textarea(null, "Notes...")</span>
+<span class="hilight">    )</span>
+<span class="lolight">  }</span>
+<span class="lolight">});</span>
+</code></pre>
+
+---
+
+class: middle center
+
+# What's changed?
+
+`randomNumber` now stored in `this.state`: value accessible without reading the DOM
+
+No fragile jQuery find-tag-then-replace-html nonsense
+
+---
+
+
+class: middle, center
+
+# Voila!
+<a href="demos/react/index.html" target="_blank">React-ified version</a>
+
+---
+
+class: middle, center, brown
+
+# What about Backbone Models/Collections?
+
+
+---
+
+class: middle, center
+
+# Where React + Backbone shines
+
+Using a small mixin we can have React automatically re-render when any model/collection changes...
+
+... so long as we store it on `this.state`
+
+---
+
+
+class: has-code, zoom-code
+
+## Backbone Listener
+
+We track event listeners via a `Backbone.Events` object.
+
+```js
+function BackboneListener(){}
+_.extend(BackboneListener.prototype, Backbone.Events);
+
+var BackboneMixin = {
+
+  getInitialState: function() {
+    return {
+      _backboneListener: new BackboneListener()
+    };
+  },
+```
+
+---
+
+class: has-code, zoom-code
+
+Hook the relevant lifecycle methods to keep subscriptions current and avoid leaks
+
+```js
+
+  componentDidMount: function() {
+    this._backboneSubscribeObjects(this.state);
+  },
+
+  componentWillUpdate: function(nextProps, nextState) {
+    this._backboneUnsubscribeObjects(this.state);
+    this._backboneSubscribeObjects(nextState);
+  },
+
+  componentWillUnmount: function() {
+    this.state._backboneListener.stopListening();
+  },
+
+```
+
+---
+
+class: has-code
+
+(Un)subscribing with `_backboneListener`
+
+```js
+  _backboneSubscribeObjects: function(hash, unsubscribe) {
+    var method = (unsubscribe === true ? 'stopListening' : 'listenTo');
+    var listener = this.state._backboneListener;
+
+    for (var key in hash) {
+      var obj = hash[key];
+
+      if (obj instanceof Backbone.Model) {
+        listener[method](obj, "change", this._forceUpdateOnce);
+
+      } else if (obj instanceof Backbone.Collection) {
+        listener[method](obj, "add remove reset sort change destroy sync",
+          this._forceUpdateOnce);
+      }
+    }
+  },
+
+  _backboneUnsubscribeObjects: function(hash) {
+    this._backboneSubscribeObjects(hash, true);
+  },
+
+```
+
+---
+
+class: middle, has-code, zoom-code
+
+For efficiency, we don't call `this.forceUpdate()` for every single change - instead at most once per runloop
+
+```js
+  _forceUpdateOnce: function() {
+    if (this._forceUpdateOnceTimer) return;
+    var _this = this;
+    this._forceUpdateOnceTimer = setTimeout(function() {
+      delete _this._forceUpdateOnceTimer;
+      if (_this.isMounted()) {
+        return _this.forceUpdate();
+      }
+    }, 0);
+  },
+```
+
+---
+
+class: middle, center
+
+**Caveat**: this makes cascading model/collection changes more efficient; *however* the update is not real time...
+
+So if you have a managed input element with `value: backboneModel.get('property')` you must call `this.forceUpdate()` in your `onChange` handler after updating the model - e.g.
+
+---
+
+class: middle, has-code, zoom-code
+
+
+```js
+changedText: function(e) {
+  model.set('text', this.refs.text.getDOMNode().value);
+  this.forceUpdate(); //<-- VITAL
+},
+
+render: function() {
+  return DOM.input({ref: 'text', 
+                    value: this.state.model.get('text'), 
+                    onChange: this.changeText
+                   });
+}
+```
+
+---
+
+class: middle, has-code, zoom-code
+
+Bonus helper methods, in case you want to hook the `'sync'` event on a collection to refetch a dependent collection or similar
+
+```js
+  listenTo: function() {
+    var listener = this.state._backboneListener;
+    return listener.listenTo.apply(listener, arguments);
+  },
+
+  stopListening: function() {
+    var listener = this.state._backboneListener;
+    return listener.stopListening.apply(listener, arguments);
+  }
+};
+```
+
+.aside[
+
+(Anything you `this.listenTo()` will be automatically unsubscribed when your component is unmounted - often this means there's no need to manually call `this.stopListening()`)
+]
+
+---
+
+class: middle, has-code, zoom-code
+
+## To use, simply add it to the `mixins` array
+
+<pre><code class="javascript"><span class="lolight">var HomeView = React.createClass({</span>
+<span class="lolight">  displayName: "HomeView",</span>
+
+<span class="hilight">  mixins: [BackboneMixin],</span>
+
+<span class="lolight">  getInitialState: function() {</span>
+<span class="lolight">    return {</span>
+<span class="hilight">      model: new MyBackboneModel(),</span>
+<span class="lolight">      randomNumber: this.randomNumber()</span>
+<span class="lolight">    };</span>
+<span class="lolight">  },</span>
+<span class="lolight">  //...</span>
+<span class="lolight">});</span>
+</code></pre>
+
+---
+
+class: middle, center
+
+# Thats it!
+
+## Change a backbone model property and everything updates immediately!
+
+
+---
+
+
+class: middle, center, cover, happy-happy-joy-joy
+
+
+---
+
+class: middle, center, brown
+
+# Syncing `props` to `state`
+
+If your framework passes data to its root view via `this.props` then we need to ensure that models and collections are copied over to `this.state`
+
+.aside[
+
+Since `BackboneMixin` monitors for changes on `this.state` only
+]
+
+---
+
+class: middle, has-code
+
+
+```js
+var BackbonePropsMixin = {
+  getInitialState: function() {
+    return _.pick(this.props, this._subscribableObject);
+  },
+  componentWillReceiveProps: function(nextProps) {
+    var changes = {}, k = null, v = null;
+    for (k in nextProps) {
+      v = nextProps[k];
+      if (this.state[k] !== v && this.props._subscribableObject(v)) {
+        changes[k] = v;
+      }
+    }
+    for (k in this.props) {
+      v = this.props[k];
+      if (this.state[k] === v && !nextProps[k] &&
+          this.props._subscribableObject(v)) {
+        changes[k] = null;
+      }
+    }
+    return this.setState(changes);
+  }
+  _subscribableObject: (o) {
+    return (o instanceof Backbone.Model) || (o instanceof Backbone.Collection);
+  }
+};
+```
+
+---
+
+class: middle
+
+# Don't over-subscribe!
+
+Only use `BackboneMixin` where you have models on your `this.state` that you'd like to listen to changes to...
+
+... and only use `BackbonePropsMixin` on top level components
+
+
+---
+
+class: middle
+
+If you subscribe to the same model in multiple places then React will be forced to redundantly render branches of the view tree multiple times due to the use of `this.forceRender()`
+
+---
+
+class: middle, center, brown
+
+
+# Re-cap
+
+
+---
+
+class: middle
+
+Don't need to tear everything up and start again
+
+Policy of all new views in React
+
+`BackboneMixin` auto-subscribes to events
+
+Use `BackbonePropsMixin` only if necessary
+
+Easier to maintain code - and less of it!
+
+---
+
+class: middle, center, blue
+
+## We're hiring developers and we'd love you to join us
+
+Jof Arnold, VP Product, @jofarnold, jof@timecounts.org
+
+Benjie Gillam, CTO, @benjie, benjie@timecounts.org
+
+
+--></script>
+    <script src="remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create({
+        source: (document.getElementById("source").innerHTML).replace(/^<!--|-->$/g, ""),
+        slideNumberFormat: function (current, total) { return null },
+        ratio: '4:3'
+      });
+    </script>
+  </body>
+</html>
