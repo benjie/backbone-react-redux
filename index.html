@@ -176,6 +176,10 @@
         background-image: url('images/nightmare.gif')
       }
 
+      .nightmare h2 {
+        color: white
+      }
+
       .rebuild {
         background-image: url('images/demolition.gif')
       }
@@ -339,12 +343,9 @@ class: middle
 ---
 
 
-/* ----- CHAPTER 1 ----- */
-
-
 class: middle, center, brown
 
-# Our Backbone stack
+#1. Our Backbone stack
 
 ... and how it came to make us unhappy
 
@@ -360,43 +361,183 @@ class: middle, center
 
 ## Handlebars
 
----
 
-
-class: middle
-
-# Problems
-
-Storing state in DOM
-
-Layout changes breaking jQuery selectors
-
-`class='_element_to_reference'` and other hacks
-
-Re-rendering entire views
-
-
----
-
-class: middle, center, cover, spaghetti
-
-## ... a total nightmare to debug and test
-
-
-
-
----
-
-class: middle, center, cover, nightmare
 
 ---
 
 class: middle, center
 
-# React solves all of this...
+# It gets bad really quick
 
-# Time to rebuild?
+## Simple example:
 
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click p': 'render'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+
+---
+
+class: middle center
+
+# Not so fast!
+
+Calling `render()` directly will overwrite everything, including our
+`<textarea>`. We lose our state.
+
+Instead we need to update just the `<span>` containing the random number:
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click p': 'newNumber'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  newNumber: function(e) {
+    this.$("span").html(this.randomNumber());
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+---
+
+
+class: middle, center
+
+# Seems ok?
+
+It might be until the designer wants a `<div>` instead of a `<p>`
+
+Fine, let's nip this in the bud and give it a special class `_button` so that the tag doesn't matter:
+
+
+---
+
+class: middle, has-code
+
+```js
+// ----- Home View -----
+var HomeView = Backbone.View.extend({
+  template: _.template('<h1>Hello World!</h1>' +
+    '<div class="_button">Random number:' +
+      '<span><%- number %></span> (click for another)' +
+    '</div>' +
+    '<textarea>Notes...</textarea>'),
+
+  events: {
+    'click ._button': 'newNumber'
+  },
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 100) + 1;
+  },
+
+  newNumber: function(e) {
+    this.$("._button span").html(this.randomNumber());
+  },
+
+  render: function() {
+    this.$el.html(this.template({
+      number: this.randomNumber()
+    }));
+  }
+});
+```
+
+---
+
+class: middle, center
+
+# Great!
+
+Let's just hope they don't change anything else, because each time they do the code breaks and the tests fail.
+
+---
+
+# Another example:
+
+Benjie to give an example
+
+---
+
+# Benjie's code codes here
+
+
+---
+
+
+# Etc 
+
+
+---
+
+
+class: middle, center, cover, spaghetti
+
+
+
+
+## ... In all it's brittle and a total nightmare to debug and test
+
+
+---
+
+
+class: middle, center
+
+## Now imagine all that scaled up to an app with 50,000 lines of code
+
+---
+
+class: cover, nightmare
+
+---
+
+class: middle, center, brown
+
+# 2. Reactjs solves all
 
 ---
 
@@ -458,12 +599,6 @@ class: middle
 # **What this is**
 ## A quick method of adding React magic to your Backbone project without having to rebuild everything
 
----
-
-class: middle, center
-
-# Example
-## Backbone to Backbone+React
 
 ---
 
@@ -550,20 +685,6 @@ var HomeView = Backbone.View.extend({
 });
 ```
 
----
-
-class: middle center
-
-# Not so fast!
-
-Calling `render()` directly will overwrite everything, including our
-`<textarea>`, resetting its content
-
-Instead we need to update just the `<span>` containing the random number:
-
----
-
-class: middle, has-code
 
 ```js
 // ----- Home View -----
@@ -689,6 +810,46 @@ class: middle, center
 
 # Voila!
 <a href="demos/react/index.html" target="_blank">React-ified version</a>
+
+
+---
+
+
+class: middle, center
+
+# Why don't we use JSX?
+
+Answer: CoffeeScript allows for awesome Jade-like inline "templates"
+
+
+
+
+---
+
+class: middle, has-code
+
+```js
+{div, span, input} = React.DOM
+
+...
+
+getInitialState: ->
+  words: ["Mary", "had", "a", "little", "lamb"]
+
+render: ->
+  div className: "wrapper",
+    if @state.words?.length
+      div null,
+        for word, index in @state.words
+          span onClick: ( (e) => console.log index ), word
+      input type: 'text', onChange: @updateSomething
+    div null, "Kinda like Jade"
+    div null, "but with all the"
+    div null, "power of JavaScript"
+
+```
+
+
 
 ---
 
