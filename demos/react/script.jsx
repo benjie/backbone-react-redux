@@ -4,7 +4,7 @@ var HomeView = React.createClass({
   getInitialState: function() {
     return {
       randomNumber: this.randomNumber()
-    }
+    };
   },
 
   randomNumber: function() {
