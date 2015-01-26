@@ -694,27 +694,40 @@ Virtual DOM
 
 ---
 
-Anything that's changeable you store on `this.state`
+class: middle
 
-E.g. `this.state.firstName`, `this.state.lastName`
+Store anything changeable on `this.state`
 
-ASIDE: there's `this.props` too... I'll come to that
+E.g. `this.state.firstName`
 
-
----
-
-When React notices a change in `this.state` it re-renders
-
-ASIDE: passing down the values through props as appropriate
+When React notices a change in `this.state` (by calling `this.setState`) it re-renders
 
 
 ---
+
+class: middle
 
 For efficiency, Reactjs doesn't re-render the whole view
 
-Instead it renders a virtual DOM.
+Instead it renders a **virtual DOM**
 
 React diffs the changes and only updates the nodes in the page that need changing
+
+.aside[
+
+(By default it uses the same differing algorithm as git)
+]
+
+
+---
+
+class: middle
+
+React's one-way data flow lends itself beautifully to components
+
+This enables easy re-use of code
+
+And it makes it clear where the data is flowing
 
 
 ---
