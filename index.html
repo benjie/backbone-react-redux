@@ -751,10 +751,10 @@ class: has-code
 var Person = React.createClass({
   render: function() {
     return (
-    <div>
-      <span>{this.props.firstName}</span>
-      <span>{this.props.lastName}</span>
-    </div>
+      <div>
+        <span>{this.props.person.firstName}</span>
+        <span>{this.props.person.lastName}</span>
+      </div>
     );
   }
 });
@@ -768,10 +768,10 @@ var PeopleList = React.createClass({
     };
   }
   render: function() {
-    people = this.state.people.map(p =>
-      <Person firstName={p.firstName} lastName={p.lastName} /> });
     return (
-      <div>{people}</div>
+      <div>
+        {this.state.people.map(p => <Person person={p} /> )}
+      </div>
     );
   }
 });
