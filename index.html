@@ -849,6 +849,33 @@ getInitialState: ->
   words: ["Mary", "had", "a", "little", "lamb"]
 
 render: ->
+  div {className: "wrapper"},
+    if @state.words?.length
+      div {},
+        for word, index in @state.words
+          span {onClick: ( (e) => console.log index )}, word
+      input {type: 'text', onChange: @updateSomething}
+    div {}, "Kinda like Jade"
+    div {}, "but with all the"
+    div {}, "power of JavaScript"
+
+```
+---
+
+class: middle, has-code
+
+We prefer omitting braces where possible:
+
+
+```js
+{div, span, input} = React.DOM
+
+...
+
+getInitialState: ->
+  words: ["Mary", "had", "a", "little", "lamb"]
+
+render: ->
   div className: "wrapper",
     if @state.words?.length
       div {},
