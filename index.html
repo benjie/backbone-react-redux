@@ -526,18 +526,86 @@ So much code!
 
 ---
 
+class: middle, center
 
-Benjie to give an example
+# Another example: optimistic updates
+
+Show new state immediately
+
+Revert if something goes wrong
 
 ---
 
-# Benjie's code codes here
+class: middle, has-code
 
+Here's the important stuff:
+
+```js
+_.extend(Backbone.Model.prototype, {
+  optimisticUpdate: function(attributes) {
+    var previousAttributes = _.pick(this.attributes, Object.keys(attributes));
+    this.set(attributes); // Show new state immediately
+    this.save(attributes, {
+      error: function() {
+        this.set(previousAttributes); // Revert if something went wrong
+      }
+    });
+  }
+});
+
+// ----------
+
+eventHandler: function(e) {
+  myModel.optimisticUpdate({age: e.target.value});
+}
+
+```
+
+But we have to update the DOM manually...
 
 ---
 
+class: middle, has-code
 
-# Etc 
+```js
+template: _.template(
+  "<h1><span class='_title_decades'><%- decades %> decade<%- s %></span> old</h1>" +
+  "<p>" +
+    "<span class='_age'><%- age %></span> / 10 = " +
+    "<span class='_decades'><%- decades %></span>" +
+  "</p>" +
+  "<input type='text' name='age'>"
+),
+updateAge: function() {
+  var age = myModel.get('age')
+  var decades = Math.floor(age/10);
+  this.$("._title_decades").html(decades + " decade" + (decade != 1 ? "s" : ""));
+  this.$("._age").html(age);
+  this.$("._decades").html(decades);
+},
+eventHandler: function(e) {
+  myModel.optimisticUpdate({age: e.target.value}, {onError: this.updateAge.bind(this)});
+  this.updateAge();
+},
+render: function() {
+  var age = myModel.get('age')
+  var decades = Math.floor(age/10);
+  this.$el.html(this.template({
+    decades: decades,
+    s: (decades != 1 ? "s" : ""),
+    age: age
+  });
+}
+```
+
+---
+
+class: middle, center
+
+
+# Oh FSM!
+
+## That didn't even fit on the slide!
 
 
 ---
