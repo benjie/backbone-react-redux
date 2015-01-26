@@ -760,7 +760,7 @@ var Person = React.createClass({
 
 var PeopleList = React.createClass({
   render: function() {
-    people = _.map( PEOPLE, function(person) {
+    people = PEOPLE.map(function(person) {
       <Person firstName={person.firstName} lastName={person.lastName} />
     });
     return (
