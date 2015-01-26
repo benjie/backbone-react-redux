@@ -634,9 +634,77 @@ class: cover, nightmare
 
 class: middle, center, brown
 
-# 2. Reactjs solves all
+# 2. What is Reactjs and how does it fix these problems?
 
 ---
+
+=== Benjie's nice react code goes here ===
+
+---
+
+class: middle
+
+
+# Practical Concepts
+
+Virtual DOM
+
+One-way data flow (`state`, `props`)
+
+Components
+
+Lifecycle methods
+
+
+.aside[
+
+(There's a lot more to React than this, but these are the bits that really make you awesome)
+]
+
+
+---
+
+Anything that's changeable you store on `this.state`
+
+E.g. `this.state.firstName`, `this.state.lastName`
+
+ASIDE: there's `this.props` too... I'll come to that
+
+
+---
+
+When React notices a change in `this.state` it re-renders
+
+ASIDE: passing down the values through props as appropriate
+
+
+---
+
+For efficiency, Reactjs doesn't re-render the whole view
+
+Instead it renders a virtual DOM.
+
+React diffs the changes and only updates the nodes in the page that need changing
+
+
+---
+
+Components explained
+
+
+---
+
+Components example
+
+---
+
+
+class: middle, center
+
+## Ok then, let's rebuild the app!
+
+---
+
 
 class: cover, rebuild
 
@@ -658,7 +726,7 @@ class: middle, center
 
 class: middle, center, brown
 
-# Solution
+# 3. React-ifying Backbone
 <img src='images/backbone-react-logo.png' title='React Logo' class='react-logo'>
 
 ---
