@@ -732,12 +732,49 @@ And it makes it clear where the data is flowing
 
 ---
 
-Components explained
+class: middle
 
+Attributes on `this.state` are passed to the component via `props`
 
 ---
 
-Components example
+class: has-code
+
+```js
+
+var PEOPLE = [
+  {firstName: "Bob", lastName: "Monkhouse"},
+  {firstName: "Amy", lastName: "Poehler"}
+];
+
+var Person = React.createClass({
+  render: function() {
+    return (
+    <div>
+      <span>{this.props.firstName}</span>
+      <span>{this.props.lastName}</span>
+    </div>
+    );
+  }
+});
+
+var PeopleList = React.createClass({
+  render: function() {
+    people = _.map( PEOPLE, function(person) {
+      <Person firstName={person.firstName} lastName={person.lastName} />
+    });
+    return (
+      <div>{people}</div>
+    );
+  }
+});
+```
+
+---
+
+class: middle, center
+
+## Fast, clear and re-usable code
 
 ---
 
