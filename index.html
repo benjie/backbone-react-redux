@@ -421,8 +421,8 @@ class: middle center
 
 # Not so fast!
 
-Calling `render()` directly will overwrite everything, including our
-`<textarea>`. We lose our state.
+Calling `render()` from the event handler will overwrite everything, including
+our `<textarea>`. We lose our state.
 
 Instead we need to update just the `<span>` containing the random number:
 
