@@ -24,7 +24,7 @@ var HomeView = React.createClass({
         React.createElement("p", {onClick: this.newNumber}, 
           "Random number: ", this.state.randomNumber, " (click for another)"
         ), 
-        React.createElement("textarea", null, "Notes...")
+        React.createElement("textarea", {defaultValue: "Notes..."})
       )
     );
   }
