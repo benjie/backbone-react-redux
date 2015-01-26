@@ -230,16 +230,6 @@
         width: 47%;
       }
 
-      code .lolight,
-      code .lolight * {
-        color: #666 !important;
-      }
-
-      code .hilight,
-      code .hilight * {
-        color: #5DC744 !important;
-      }
-
       .comment, .hljs-title {
         color: #969896;
       }
@@ -284,8 +274,17 @@
       }
 
 
+      .hljs-default .hljs-tag,
+      .hljs-default .xml .hljs-tag,
+      .hljs-default .hljs-tag .hljs-title,
+      .hljs-default .xml .hljs-tag .hljs-title {
+        color: #66ADC7;
+        font-weight: normal !important;
+      }
+
       .hljs-default .hljs-title {
-        color: #16BECC
+        color: #16BECC;
+        font-weight: normal !important;
       }
 
       code, .remark-code {border: none !important}
@@ -293,6 +292,18 @@
       .hljs-default .javascript .xml {
         opacity: 1;
       }
+
+      code .lolight,
+      code .lolight * {
+        color: #666 !important;
+      }
+
+      code .hilight,
+      code .hilight * {
+        color: #5DC744 !important;
+      }
+
+
     </style>
   </head>
   <body>
@@ -1025,7 +1036,7 @@ class: middle, has-code
 Without JSX, jade-like template with logic:
 
 
-```js
+```coffee
 {div, span, input} = React.DOM
 
 ...
@@ -1052,7 +1063,7 @@ class: middle, has-code
 We prefer omitting braces where possible:
 
 
-```js
+```coffee
 {div, span, input} = React.DOM
 
 ...
