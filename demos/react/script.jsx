@@ -1,5 +1,3 @@
-var DOM = React.DOM;
-
 var HomeView = React.createClass({
   displayName: "HomeView",
 
