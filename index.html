@@ -741,12 +741,6 @@ Attributes on `this.state` are passed to the component via `props`
 class: has-code
 
 ```js
-
-var PEOPLE = [
-  {firstName: "Bob", lastName: "Monkhouse"},
-  {firstName: "Amy", lastName: "Poehler"}
-];
-
 var Person = React.createClass({
   render: function() {
     return (
@@ -757,12 +751,18 @@ var Person = React.createClass({
     );
   }
 });
-
 var PeopleList = React.createClass({
+  getInitialState: function() {
+    return {
+      people: [
+        {firstName: "Bob", lastName: "Monkhouse"},
+        {firstName: "Amy", lastName: "Poehler"}
+      ];
+    };
+  }
   render: function() {
-    people = PEOPLE.map(function(person) {
-      <Person firstName={person.firstName} lastName={person.lastName} />
-    });
+    people = this.state.people.map(p =>
+      <Person firstName={p.firstName} lastName={p.lastName} /> });
     return (
       <div>{people}</div>
     );
