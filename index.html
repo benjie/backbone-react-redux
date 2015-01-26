@@ -673,30 +673,6 @@ var HomeView = Backbone.View.extend({
     '<textarea>Notes...</textarea>'),
 
   events: {
-    'click p': 'render'
-  },
-
-  randomNumber: function() {
-    return Math.floor(Math.random() * 100) + 1;
-  },
-
-  render: function() {
-    this.$el.html(this.template({
-      number: this.randomNumber()
-    }));
-  }
-});
-```
-
-
-```js
-// ----- Home View -----
-var HomeView = Backbone.View.extend({
-  template: _.template('<h1>Hello World!</h1>' +
-    '<p>Random number: <span><%- number %></span> (click for another)</p>' +
-    '<textarea>Notes...</textarea>'),
-
-  events: {
     'click p': 'newNumber'
   },
 
