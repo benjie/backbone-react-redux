@@ -795,16 +795,50 @@ class: middle, center
 
 class: middle, center
 
-# Why don't we use JSX?
+# Use CoffeeScript!
 
-Answer: CoffeeScript allows for awesome Jade-like inline "templates"
-
+With or without JSX, CoffeeScript let you express yourself more clearly and
+concisely. Less code means faster understanding and easier to track down bugs.
 
 
 
 ---
 
 class: middle, has-code
+
+CoffeeScript with JSX (using `coffee-react`):
+
+```coffee
+HomeView = React.createClass
+  displayName: "HomeView"
+
+  getInitialState: ->
+    randomNumber: @randomNumber()
+
+  randomNumber: ->
+    Math.floor(Math.random() * 100) + 1
+
+  newNumber: (e) ->
+    @setState
+      randomNumber: @randomNumber()
+    return
+
+  render: ->
+    <div>
+      <h1>Hello World!</h1>
+      <p onClick={@newNumber}>
+        Random number: {@state.randomNumber} (click for another)
+      </p>
+      <textarea defaultValue="Notes..." />
+    </div>
+```
+
+---
+
+class: middle, has-code
+
+Without JSX, jade-like template with logic:
+
 
 ```js
 {div, span, input} = React.DOM
@@ -817,13 +851,13 @@ getInitialState: ->
 render: ->
   div className: "wrapper",
     if @state.words?.length
-      div null,
+      div {},
         for word, index in @state.words
           span onClick: ( (e) => console.log index ), word
       input type: 'text', onChange: @updateSomething
-    div null, "Kinda like Jade"
-    div null, "but with all the"
-    div null, "power of JavaScript"
+    div {}, "Kinda like Jade"
+    div {}, "but with all the"
+    div {}, "power of JavaScript"
 
 ```
 
