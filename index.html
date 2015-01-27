@@ -1259,11 +1259,12 @@ class: has-code
       var obj = hash[key];
 
       if (obj instanceof Backbone.Model) {
-        listener[method](obj, "change", this._forceUpdateOnce);
+        listener[method](obj, "change",
+          _.bind(this.setState, this, _.object([[key, obj]])));
 
       } else if (obj instanceof Backbone.Collection) {
         listener[method](obj, "add remove reset sort change destroy sync",
-          this._forceUpdateOnce);
+          _.bind(this.setState, this, _.object([[key, obj]])));
       }
     }
   },
@@ -1272,52 +1273,6 @@ class: has-code
     this._backboneSubscribeObjects(hash, true);
   },
 
-```
-
----
-
-class: middle, has-code, zoom-code
-
-For efficiency, we don't call `this.forceUpdate()` for every single change - instead at most once per runloop
-
-```js
-  _forceUpdateOnce: function() {
-    if (this._forceUpdateOnceTimer) return;
-    var _this = this;
-    this._forceUpdateOnceTimer = setTimeout(function() {
-      delete _this._forceUpdateOnceTimer;
-      if (_this.isMounted()) {
-        return _this.forceUpdate();
-      }
-    }, 0);
-  },
-```
-
----
-
-class: middle, center
-
-**Caveat**: this makes cascading model/collection changes more efficient; *however* the update is not real time...
-
-So if you have a managed input element with `value: backboneModel.get('property')` you must call `this.forceUpdate()` in your `onChange` handler after updating the model - e.g.
-
----
-
-class: middle, has-code, zoom-code
-
-
-```js
-changedText: function(e) {
-  model.set('text', this.refs.text.getDOMNode().value);
-  this.forceUpdate(); //<-- VITAL
-},
-
-render: function() {
-  return DOM.input({ref: 'text', 
-                    value: this.state.model.get('text'), 
-                    onChange: this.changeText
-                   });
-}
 ```
 
 ---
