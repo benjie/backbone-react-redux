@@ -655,7 +655,45 @@ class: middle, center, brown
 
 class: middle, has-code
 
-Optimistic update again, but with React:
+## Remember this?
+
+```js
+template: _.template(
+  "<h1><span class='_title_decades'><%- decades %> decade<%- s %></span> old</h1>" +
+  "<p>" +
+    "<span class='_age'><%- age %></span> / 10 = " +
+    "<span class='_decades'><%- decades %></span>" +
+  "</p>" +
+  "<input type='text' name='age'>"
+),
+updateAge: function() {
+  var age = myModel.get('age')
+  var decades = Math.floor(age/10);
+  this.$("._title_decades").html(decades + " decade" + (decade != 1 ? "s" : ""));
+  this.$("._age").html(age);
+  this.$("._decades").html(decades);
+},
+eventHandler: function(e) {
+  myModel.optimisticUpdate({age: e.target.value}, {onError: this.updateAge.bind(this)});
+  this.updateAge();
+},
+render: function() {
+  var age = myModel.get('age')
+  var decades = Math.floor(age/10);
+  this.$el.html(this.template({
+    decades: decades,
+    s: (decades != 1 ? "s" : ""),
+    age: age
+  });
+}
+```
+
+---
+
+
+class: middle, has-code
+
+Here it is again, but with React:
 
 ```js
 eventHandler: function(e) {
