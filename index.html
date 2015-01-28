@@ -1260,11 +1260,11 @@ class: has-code
 
       if (obj instanceof Backbone.Model) {
         listener[method](obj, "change",
-          _.bind(this.setState, this, _.object([[key, obj]])));
+          _.bind(this.setState, this, _.object([[key, obj]]), null));
 
       } else if (obj instanceof Backbone.Collection) {
         listener[method](obj, "add remove reset sort change destroy sync",
-          _.bind(this.setState, this, _.object([[key, obj]])));
+          _.bind(this.setState, this, _.object([[key, obj]]), null));
       }
     }
   },
