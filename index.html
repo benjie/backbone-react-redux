@@ -1253,18 +1253,18 @@ class: has-code
 ```js
   _backboneSubscribeObjects: function(hash, unsubscribe) {
     var method = (unsubscribe === true ? 'stopListening' : 'listenTo');
-    var listener = this.state._backboneListener;
-
+    var listener = this.state._backboneListener, _this = this;
+    function update(key) {
+      return function() {
+        _this.setState(_.object([key], [_this.state[key]]));
+      }
+    }
     for (var key in hash) {
       var obj = hash[key];
-
       if (obj instanceof Backbone.Model) {
-        listener[method](obj, "change",
-          _.bind(this.setState, this, _.object([[key, obj]]), null));
-
+        listener[method](obj, "change", update(key));
       } else if (obj instanceof Backbone.Collection) {
-        listener[method](obj, "add remove reset sort change destroy sync",
-          _.bind(this.setState, this, _.object([[key, obj]]), null));
+        listener[method](obj, "add remove reset sort change destroy", update(key));
       }
     }
   },
