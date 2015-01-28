@@ -1248,23 +1248,26 @@ Hook the relevant lifecycle methods to keep subscriptions current and avoid leak
 
 class: has-code
 
-(Un)subscribing with `_backboneListener`
-
 ```js
   _backboneSubscribeObjects: function(hash, unsubscribe) {
     var method = (unsubscribe === true ? 'stopListening' : 'listenTo');
     var listener = this.state._backboneListener, _this = this;
-    function update(key) {
+
+    function mutated(key) {
       return function() {
-        _this.setState(_.object([key], [_this.state[key]]));
+        var mutatedObjects = {};
+        // Tell React the object has mutated:
+        mutatedObjects[key] = _this.state[key];
+        _this.setState(mutatedObjects);
       }
     }
+
     for (var key in hash) {
       var obj = hash[key];
       if (obj instanceof Backbone.Model) {
-        listener[method](obj, "change", update(key));
+        listener[method](obj, "change", mutated(key));
       } else if (obj instanceof Backbone.Collection) {
-        listener[method](obj, "add remove reset sort change destroy", update(key));
+        listener[method](obj, "add remove reset sort change destroy", mutated(key));
       }
     }
   },
